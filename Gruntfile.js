@@ -3,6 +3,15 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     concat: {
+      options: {
+        stripBanners: true,
+        banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' + '<%= grunt.template.today("yyyy-mm-dd") %> */',
+        separator: ';'
+      },
+      dist: {
+        src: ['public/client/**/*.js'],
+        dest: 'public/dist/<%= pkg.name %>.js'
+      }
     },
 
     mochaTest: {
@@ -21,6 +30,15 @@ module.exports = function(grunt) {
     },
 
     uglify: {
+      options: {
+        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+      },
+      dist: {
+        files: {
+          'public/dist/<%= pkg.name %>.min.js': ['<%= concat.dist.dest %>']
+        }
+      }
+
     },
 
     eslint: {
@@ -30,6 +48,9 @@ module.exports = function(grunt) {
     },
 
     cssmin: {
+
+
+
     },
 
     watch: {
@@ -51,6 +72,10 @@ module.exports = function(grunt) {
 
     shell: {
       prodServer: {
+
+
+
+
       }
     },
   });
@@ -77,11 +102,15 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('build', [
+    'concat',
+    'uglify',
+    'cssmin'
   ]);
 
   grunt.registerTask('upload', function(n) {
     if (grunt.option('prod')) {
       // add your production server task here
+      grunt.task.run([ 'shell:prodServer']);
     } else {
       grunt.task.run([ 'server-dev' ]);
     }
@@ -89,6 +118,9 @@ module.exports = function(grunt) {
 
   grunt.registerTask('deploy', [
     // add your deploy tasks here
+    'test',
+    'build',
+    'upload'
   ]);
 
 
