@@ -48,9 +48,11 @@ module.exports = function(grunt) {
     },
 
     cssmin: {
-
-
-
+      dist: {
+        files: {
+          'public/dist/style.min.css': 'public/style.css'
+        }
+      }
     },
 
     watch: {
@@ -72,7 +74,6 @@ module.exports = function(grunt) {
 
     shell: {
       prodServer: {
-
 
 
 
@@ -98,7 +99,6 @@ module.exports = function(grunt) {
   ////////////////////////////////////////////////////
 
   grunt.registerTask('test', [
-    'mochaTest'
   ]);
 
   grunt.registerTask('build', [
